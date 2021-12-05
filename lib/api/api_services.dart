@@ -7,7 +7,9 @@ import 'package:isloo_tech_assignment/api/api_response.dart';
 import 'package:isloo_tech_assignment/api/api_status.dart';
 
 class ApiServices {
-  static getProductList() async {
+  ApiServices();
+
+  getProductList() async {
     try {
       // Dio dio = Dio();
       Uri uri = Uri.parse("${Api.GET_ALL_PRODUCTS}");
@@ -45,10 +47,10 @@ class ApiServices {
     }
   }
 
-  static getSingleProduct({int id}) async {
+  getSingleProduct({int id}) async {
     try {
-      // Dio dio = Dio();
-      Uri uri = Uri.parse("${Api.GET_ALL_PRODUCTS}$id");
+      print("Product ID---------------------$id");
+      Uri uri = Uri.parse("${Api.Get_SINGLE_PRODUCT}$id");
       var response = await http
           .get(
         uri,

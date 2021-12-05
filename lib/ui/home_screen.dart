@@ -3,37 +3,35 @@ import 'package:get/get.dart';
 import 'package:isloo_tech_assignment/api/api_resource.dart';
 import 'package:isloo_tech_assignment/api/api_status.dart';
 import 'package:isloo_tech_assignment/constant/colors.dart';
-import 'package:isloo_tech_assignment/controller.dart/product_detail_controller.dart';
 import 'package:isloo_tech_assignment/controller.dart/product_list_controller.dart';
 import 'package:isloo_tech_assignment/objects/product.dart';
-import 'package:isloo_tech_assignment/ui/poduct_detail.dart';
+import 'package:isloo_tech_assignment/ui/poduct_detail_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key key}) : super(key: key);
-  GlobalKey _scaffoldKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
+    Get.put(ProductListController());
     // controller.getMovies();
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         title: Text(
           "Listings",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         // titleSpacing: 0,
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.DARK_YELLOW,
         actions: [
           IconButton(
               icon: Icon(
                 Icons.search,
-                color: Colors.black,
+                color: Colors.white,
               ),
               onPressed: () {})
         ],
@@ -44,12 +42,17 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              color: AppColor.DARK_YELLOW,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(
+                          AppColor.DARK_YELLOW.withOpacity(0.1)),
+                      backgroundColor: MaterialStateProperty.all(
+                          AppColor.DARK_YELLOW.withOpacity(0.5)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -68,6 +71,7 @@ class HomeScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
                       // backgroundColor:MaterialStateProperty.all(value)<Color>(),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -81,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                     child: Text(
                       "Cranes",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         // fontSize: 18,
                       ),
                       textAlign: TextAlign.center,
@@ -90,6 +94,7 @@ class HomeScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -99,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                     child: Text(
                       "Trailers",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         //   fontSize: 18,
                       ),
                       textAlign: TextAlign.center,
@@ -109,46 +114,43 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             GetBuilder<ProductListController>(initState: (state) {
-              Get.put(ProductListController);
-
-              Get.put(ProductDetailController());
+              ProductListController.to.getMovies();
             }, builder: (snapshot) {
-              if (snapshot.model == null) {
-                return Container(
+              if (snapshot.model.status == PsStatus.BLOCK_LOADING) {
+                return Expanded(
+                    child: Container(
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
-                );
-              } else if (snapshot.isConnected == false) {
-                return Container(
-                  child: Center(
-                    child: Text("Internet connection error..."),
+                ));
+              } else if (snapshot.model.status == PsStatus.ERROR) {
+                return Expanded(
+                  child: Container(
+                    child: Center(
+                      child: Text("Internet connection error..."),
+                    ),
                   ),
                 );
-              } else if (snapshot.model != null) {
+              } else if (snapshot.model.status == PsStatus.SUCCESS) {
                 PsResource resource = snapshot.model;
 
-                if (resource.status == PsStatus.SUCCESS) {
-                  List<Product> model = Product.getProductList(resource.list);
-                  return Expanded(
-                    child: Container(
-                      // height: height * 0.4,
-                      child: ListView.builder(
-                        itemCount: model.length,
-                        itemBuilder: (context, index) => listItem(
-                            height, width, model[index], context, index),
-                      ),
+                List<Product> model = Product.getProductList(resource.list);
+                return Expanded(
+                  child: Container(
+                    // height: height * 0.4,
+                    child: ListView.builder(
+                      itemCount: model.length,
+                      itemBuilder: (context, index) =>
+                          listItem(height, width, model[index], context, index),
                     ),
-                  );
-                } else if (resource.status == PsStatus.ERROR) {
-                  return Container(
-                    child: Center(
-                      child: Text("Connection Error"),
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
+                  ),
+                );
+              } else if (snapshot.model.status == PsStatus.ERROR) {
+                return Container(
+                  child: Center(
+                    child: Text("Connection Error"),
+                  ),
+                );
               } else {
                 return Container();
               }
@@ -305,19 +307,21 @@ class HomeScreen extends StatelessWidget {
                             padding: EdgeInsets.only(top: height * 0.004),
                             child: Container(
                               child: Text(
-                                "${model.price}",
+                                "${model.category}",
                                 maxLines: 1,
-                                style: TextStyle(color: Colors.grey),
+                                style: TextStyle(color: AppColor.DARK_YELLOW),
                               ),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: height * 0.005),
                             child: Container(
-                              height: 20,
+                              height: 25,
                               child: ElevatedButton(
                                 onPressed: () {},
                                 style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      AppColor.DARK_YELLOW),
                                   shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
@@ -343,7 +347,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(
-                    Icons.arrow_forward_ios,
+                    Icons.arrow_forward_ios_rounded,
                     color: Colors.grey,
                   ),
                   onPressed: () {},

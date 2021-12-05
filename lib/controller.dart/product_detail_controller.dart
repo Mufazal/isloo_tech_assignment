@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:isloo_tech_assignment/api/api_resource.dart';
 import 'package:isloo_tech_assignment/api/api_services.dart';
+import 'package:isloo_tech_assignment/api/api_status.dart';
 import 'package:isloo_tech_assignment/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -10,17 +10,22 @@ class ProductDetailController extends GetxController {
   PsResource model;
   bool isConnected;
   bool loading;
-  getMovies(int id) async {
-    // notifyListeners();
-    loading = false;
+  getSingleProductDetail(int id) async {
+    model = PsResource(
+      status: PsStatus.BLOCK_LOADING,
+      message: "",
+    );
+
     Utils.checkInternetConnectivity().then((value) async {
       print(value);
       if (value) {
-        model = await ApiServices.getSingleProduct(id: id);
-        //  notifyListeners();
+        ApiServices services = ApiServices();
+        model = await services.getSingleProduct(id: id);
+        update();
       } else {
         isConnected = false;
-        //   notifyListeners();
+
+        update();
       }
     });
   }

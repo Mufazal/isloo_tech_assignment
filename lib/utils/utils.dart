@@ -8,7 +8,7 @@ class Utils {
         await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.mobile) {
       try {
-        final result = await InternetAddress.lookup('google.com');
+        final result = await InternetAddress.lookup('www.google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
           print('connected');
           return true;
@@ -20,7 +20,7 @@ class Utils {
       }
     } else if (connectivityResult == ConnectivityResult.wifi) {
       try {
-        final result = await InternetAddress.lookup('google.com');
+        final result = await InternetAddress.lookup('www.google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
           print('connected');
           return true;

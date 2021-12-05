@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isloo_tech_assignment/ui/home.dart';
+import 'package:isloo_tech_assignment/ui/home_screen.dart';
 
 void main() {
   runApp(MyApp());

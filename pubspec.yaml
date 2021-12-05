@@ -30,11 +30,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: 
   progressive_image: #^2.0.0
-  
   cached_network_image: #^3.1.0
-  connectivity: 
-  
+  connectivity:
   get: #^4.5.1 
+  google_maps_flutter:
+  #geocoder: 
+  #geolocator: 
 
 dev_dependencies:
   flutter_test:

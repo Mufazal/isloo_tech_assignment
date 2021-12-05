@@ -3,6 +3,9 @@
    <application
         android:label="isloo_tech_assignment"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyBUQfGyJaOHyt7TCT9rTW0HoT1-Z4Wo3as"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
