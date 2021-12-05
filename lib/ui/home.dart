@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:isloo_tech_assignment/api/api_resource.dart';
 import 'package:isloo_tech_assignment/api/api_status.dart';
+import 'package:isloo_tech_assignment/controller.dart/product_detail_controller.dart';
 import 'package:isloo_tech_assignment/controller.dart/product_list_controller.dart';
 import 'package:isloo_tech_assignment/objects/product.dart';
 import 'package:isloo_tech_assignment/ui/poduct_detail.dart';
@@ -30,22 +32,24 @@ class HomeScreen extends StatelessWidget {
       body: Container(
         height: height,
         width: width,
-        child: Consumer<ProductListController>(
-            builder: (context, snapshot, child) {
-          if (snapshot.model == null) {
+        child: GetBuilder<ProductListController>(initState: (state) {
+          Get.put(ProductListController());
+          Get.put(ProductDetailController());
+        }, builder: (controller) {
+          if (controller.model == null) {
             return Container(
               child: Center(
                 child: CircularProgressIndicator(),
               ),
             );
-          } else if (snapshot.isConnected == false) {
+          } else if (controller.isConnected == false) {
             return Container(
               child: Center(
                 child: Text("Internet connection error..."),
               ),
             );
-          } else if (snapshot.model != null) {
-            PsResource resource = snapshot.model;
+          } else if (controller.model != null) {
+            PsResource resource = controller.model;
 
             if (resource.status == PsStatus.SUCCESS) {
               List<Product> model = Product.getProductList(resource.list);

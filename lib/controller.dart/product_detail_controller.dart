@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:isloo_tech_assignment/api/api_resource.dart';
 import 'package:isloo_tech_assignment/api/api_services.dart';
 import 'package:isloo_tech_assignment/utils/utils.dart';
+import 'package:get/get.dart';
 
-class ProductDetailController extends ChangeNotifier {
+class ProductDetailController extends GetxController {
+  static ProductDetailController get to => Get.find();
+
   PsResource model;
   bool isConnected;
   bool loading;
@@ -14,10 +17,10 @@ class ProductDetailController extends ChangeNotifier {
       print(value);
       if (value) {
         model = await ApiServices.getSingleProduct(id: id);
-        notifyListeners();
+        //  notifyListeners();
       } else {
         isConnected = false;
-        notifyListeners();
+        //   notifyListeners();
       }
     });
   }
