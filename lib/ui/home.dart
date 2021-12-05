@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:isloo_tech_assignment/api/api_resource.dart';
 import 'package:isloo_tech_assignment/api/api_status.dart';
@@ -6,9 +7,7 @@ import 'package:isloo_tech_assignment/controller.dart/product_detail_controller.
 import 'package:isloo_tech_assignment/controller.dart/product_list_controller.dart';
 import 'package:isloo_tech_assignment/objects/product.dart';
 import 'package:isloo_tech_assignment/ui/poduct_detail.dart';
-import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -17,9 +16,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    var controller = Provider.of<ProductListController>(context, listen: false);
 
-    controller.getMovies();
+    // controller.getMovies();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
